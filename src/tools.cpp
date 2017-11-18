@@ -13,7 +13,7 @@
 namespace tools
 {
 
-void string_replace(std::string& string, std::string what, std::string with_what)
+void string_replace(std::string& string, const std::string& what, const std::string& with_what)
 {
     size_t index = string.find(what);
     while (index != std::string::npos) {
@@ -31,6 +31,7 @@ const std::string& get_user_name()
                     std::string(pwd->pw_name) :
                     "null";
         }();
+    return username;
 }
 
 }

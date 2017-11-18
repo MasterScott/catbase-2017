@@ -10,7 +10,7 @@ TARGET=$(OUT_DIR)/$(OUT_NAME)
 
 INCLUDES=-Iinclude
 LDLIBS=-lpthread -lstdc++
-LDFLAGS=-shared -L$(realpath $(LIB_DIR))
+LDFLAGS=-shared -L$(realpath $(LIB_DIR)) -Wl,--no-undefined
 SOURCES=$(shell find $(SRC_DIR) -name "*.c*" -print)
 
 CXX=$(shell sh -c "which g++-6 || which g++")

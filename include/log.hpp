@@ -22,7 +22,6 @@ enum class level
 
 void setup(level lvl, bool write_to_file, std::string filename);
 
-void log(level lvl, const char *string);
 void debug(const char *format, ...);
 void info(const char *format, ...);
 void warning(const char *format, ...);
