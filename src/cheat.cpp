@@ -7,6 +7,7 @@
 
 #include "cheat.hpp"
 #include "log.hpp"
+#include "sharedobjects.hpp"
 
 namespace cheat
 {
@@ -14,10 +15,9 @@ namespace cheat
 void init()
 {
     log::setup(log::level::DEBUG, true, "/tmp/catbase-%USER%.log");
-    log::debug("Welcome!");
     log::info("Welcome!");
-    log::warning("Welcome!");
-    log::error("Welcome!");
+    log::debug("Trying to load some shared objects");
+    log::debug("client.so:CreateInterface: %p", so::client().create_interface_fn);
 }
 
 void shutdown()

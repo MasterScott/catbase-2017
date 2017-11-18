@@ -9,7 +9,7 @@ OUT_DIR=bin
 TARGET=$(OUT_DIR)/$(OUT_NAME)
 
 INCLUDES=-Iinclude
-LDLIBS=-lpthread -lstdc++
+LDLIBS=-lpthread -lstdc++ -ldl
 LDFLAGS=-shared -L$(realpath $(LIB_DIR)) -Wl,--no-undefined
 SOURCES=$(shell find $(SRC_DIR) -name "*.c*" -print)
 
