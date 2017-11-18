@@ -6,23 +6,23 @@
  */
 
 #include <thread>
+#include <atomic>
 
-#include "log.hpp"
+#include "cheat.hpp"
 
 std::thread main_thread;
 
-void base_main()
+void cheat_main_thread()
 {
-    log::setup(log::level::DEBUG, true, "/tmp/catbase-%USER%.log");
-    log::info("Welcome!");
+    cheat::init();
 }
 
 void __attribute__((constructor)) attach()
 {
-    main_thread = std::thread { base_main };
+    main_thread = std::thread { cheat_main_thread };
 }
 
 void __attribute__((destructor)) detach()
 {
-    log::info("Unloading!");
+    cheat::shutdown();
 }

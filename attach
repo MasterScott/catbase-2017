@@ -24,13 +24,6 @@ proc=${arr[$inst]}
 echo Running instances: "${arr[@]}"
 echo Attaching to "$proc"
 
-#sudo ./detach $inst bin/libcathook.so
-
-#if grep -q "$(realpath bin/libcathook.so)" /proc/"$proc"/maps; then
-#  echo already loaded
-#  exit
-#fi
-
 # pBypass for crash dumps being sent
 # You may also want to consider using -nobreakpad in your launch options.
 sudo rm -rf /tmp/dumps # Remove if it exists
