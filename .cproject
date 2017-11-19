@@ -38,26 +38,14 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.1803885297.779295679" name="/" resourcePath="src">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.base.808089199" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base" unusedChildren="">
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1468144092" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.304616290"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1800003643" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.614330404">
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1700936830" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.102918632" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base.744685268">
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1494568158" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.131330990" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base.1965052430"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1471329968" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base.614839105"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.base.365295377" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base.1497283908">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.767844817" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="sdk|include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/hooks"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/sdk"/>
+						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/hooks"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/sdk"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
