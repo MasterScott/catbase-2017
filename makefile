@@ -9,8 +9,8 @@ OUT_DIR=bin
 TARGET=$(OUT_DIR)/$(OUT_NAME)
 
 INCLUDES=-Iinclude
-LDLIBS=-lpthread -lstdc++ -ldl
-LDFLAGS=-shared -L$(realpath $(LIB_DIR)) -Wl,--no-undefined
+LDLIBS=
+LDFLAGS=-shared -L$(realpath $(LIB_DIR)) -L/usr/lib/i386-linux-gnu
 SOURCES=$(shell find $(SRC_DIR) -name "*.c*" -print)
 
 CXX=$(shell sh -c "which g++-6 || which g++")
