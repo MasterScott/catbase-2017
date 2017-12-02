@@ -126,26 +126,26 @@ shared_object& materialsystem()
 
 shared_object& vguimatsurface()
 {
-        static shared_object object("vguimatsurface.so", true);
-        return object;
+    static shared_object object("vguimatsurface.so", true);
+    return object;
 }
 
 shared_object& vgui2()
 {
-        static shared_object object("vgui2.so", true);
-        return object;
+    static shared_object object("vgui2.so", true);
+    return object;
 }
 
 shared_object& studiorender()
 {
-        static shared_object object("studiorender.so", true);
-        return object;
+    static shared_object object("studiorender.so", true);
+    return object;
 }
 
 shared_object& libsdl()
 {
-        static shared_object object("libSDL2-2.0.so.0", false);
-        return object;
+    static shared_object object("libSDL2-2.0.so.0", false);
+    return object;
 }
 
 }

@@ -21,9 +21,8 @@ public:
     typedef void *(*CreateInterface_t)(const char *, int *);
 public:
     shared_object(const std::string& name, bool is_interface_factory);
-public:
-    void* create_interface(const std::string& interface);
-    void  load();
+protected:
+    void load();
 public:
     std::string name_;
     std::string path_;
