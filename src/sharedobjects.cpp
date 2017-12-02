@@ -8,12 +8,19 @@
 #include "sharedobjects.hpp"
 #include "tools.hpp"
 #include "log.hpp"
+#include "defer.hpp"
 
 #include <fstream>
 #include <thread>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <string.h>
 #include <link.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <elf.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 namespace so {
 
@@ -69,8 +76,8 @@ void shared_object::load()
         }
         lmap = (link_map *)dlopen(path_.c_str(), RTLD_NOLOAD);
     }
-
-    log::debug("Shared object %s loaded at 0x%08x", name_.c_str(), lmap->l_addr);
+    text_section_info();
+    log::debug("Shared object %s loaded at 0x%08x, .text[%08x - %08x]", name_.c_str(), lmap->l_addr, text_begin_, text_end_);
     if (factory_)
     {
         create_interface_fn = reinterpret_cast<CreateInterface_t>(dlsym(lmap, "CreateInterface"));
@@ -81,6 +88,51 @@ void shared_object::load()
     }
 }
 
+void shared_object::text_section_info()
+{
+    int fd = open(path_.c_str(), O_RDONLY);
+    size_t size = lseek(fd, 0, SEEK_END);
+    uintptr_t begin = uintptr_t(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
+
+    defer
+    (
+        munmap((void *)begin, size);
+        close(fd);
+    )
+
+    Elf32_Ehdr *ehdr = (Elf32_Ehdr *)begin;
+    Elf32_Shdr *shdr = (Elf32_Shdr *)(begin + ehdr->e_shoff);
+    int shnum = ehdr->e_shnum;
+
+    Elf32_Shdr *shstr = &shdr[ehdr->e_shstrndx];
+    if (shstr == nullptr)
+    {
+        log::error("ELF string table is NULL for %s", path_.c_str());
+        return;
+    }
+    if (shstr->sh_type != SHT_STRTAB)
+    {
+        log::error("Invalid string table for %s", path_.c_str());
+        return;
+    }
+
+    char *strtab = (char *)(begin + shstr->sh_offset);
+    int strtabnum = shstr->sh_size;
+
+    for (int i = 0; i < ehdr->e_shnum; i++)
+    {
+        Elf32_Shdr *hdr = &shdr[i];
+        if (hdr && hdr->sh_name < strtabnum)
+        {
+            if (strcmp(strtab + hdr->sh_name, ".text") == 0)
+            {
+                text_begin_ = lmap->l_addr + hdr->sh_addr;
+                text_end_ = text_begin_ + hdr->sh_size;
+                return;
+            }
+        }
+    }
+}
 
 shared_object& steamclient()
 {

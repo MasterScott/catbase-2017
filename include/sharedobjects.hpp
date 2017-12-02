@@ -23,6 +23,7 @@ public:
     shared_object(const std::string& name, bool is_interface_factory);
 protected:
     void load();
+    void text_section_info();
 public:
     std::string name_;
     std::string path_;
@@ -32,6 +33,9 @@ public:
 
     CreateInterface_t create_interface_fn{ nullptr };
     link_map *lmap{ nullptr };
+
+    uintptr_t text_begin_{ 0 };
+    uintptr_t text_end_{ 0 };
 };
 
 
