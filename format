@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo Formatting sources... This may take a while.
+./clang-format-all src
+./clang-format-all include

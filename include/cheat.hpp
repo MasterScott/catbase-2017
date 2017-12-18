@@ -12,5 +12,4 @@ namespace cheat
 
 void init();
 void shutdown();
-
 }

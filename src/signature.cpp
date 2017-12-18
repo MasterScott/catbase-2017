@@ -15,9 +15,10 @@
 #include <stdio.h>
 #include <string.h>
 
-namespace signature {
+namespace signature
+{
 
-signature::signature(const std::string& ida)
+signature::signature(const std::string &ida)
 {
     for (size_t i = 0; i < ida.length(); i++)
     {
@@ -39,7 +40,7 @@ signature::signature(const std::string& ida)
         if (i < ida.length() - 1)
         {
             char lower = ida.at(i + 1);
-            char byte = (chtohex(ch) << 4) | chtohex(lower);
+            char byte  = (chtohex(ch) << 4) | chtohex(lower);
             data_.push_back(byte);
             mask_.push_back(true);
             ++i;
@@ -50,7 +51,8 @@ signature::signature(const std::string& ida)
 
 signature::signature(const uint8_t *bytes, const char *mask)
 {
-    for (size_t i = 0; i < strlen(mask); i++) {
+    for (size_t i = 0; i < strlen(mask); i++)
+    {
         if (mask_[i] != '?')
         {
             data_.push_back(bytes[i]);
@@ -72,7 +74,7 @@ uintptr_t signature::scan(uintptr_t start, uintptr_t end)
     {
         if (mask_.at(found))
         {
-            if (*(uint8_t *)start == data_.at(found))
+            if (*(uint8_t *) start == data_.at(found))
                 ++found;
             else
                 found = 0;
@@ -89,9 +91,8 @@ uintptr_t signature::scan(uintptr_t start, uintptr_t end)
     return not_found;
 }
 
-uintptr_t signature::scan(const so::shared_object& object)
+uintptr_t signature::scan(const so::shared_object &object)
 {
     return scan(object.text_begin_, object.text_end_);
 }
-
 }

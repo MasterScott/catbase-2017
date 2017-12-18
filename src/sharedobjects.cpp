@@ -22,16 +22,18 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
-namespace so {
-
-bool object_full_path(std::string& name, std::string& out_full_path)
+namespace so
 {
-    std::ifstream maps(tools::makestring("/proc/", getpid(), "/maps"), std::ios::in);
+
+bool object_full_path(std::string &name, std::string &out_full_path)
+{
+    std::ifstream maps(tools::makestring("/proc/", getpid(), "/maps"),
+                       std::ios::in);
     if (maps.bad())
     {
         return false;
     }
-    for (std::string line; getline(maps, line); )
+    for (std::string line; getline(maps, line);)
     {
         size_t s_path = line.find_first_of('/');
         size_t s_name = line.find_last_of('/');
@@ -39,7 +41,8 @@ bool object_full_path(std::string& name, std::string& out_full_path)
         {
             continue;
         }
-        if (0 == name.compare(0, std::string::npos, line, s_name + 1, name.length()))
+        if (0 ==
+            name.compare(0, std::string::npos, line, s_name + 1, name.length()))
         {
             out_full_path = line.substr(s_path);
             if (out_full_path.back() == '\n')
@@ -52,8 +55,8 @@ bool object_full_path(std::string& name, std::string& out_full_path)
     return false;
 }
 
-shared_object::shared_object(const std::string& name, bool is_interface_factory):
-        name_(name), factory_(is_interface_factory)
+shared_object::shared_object(const std::string &name, bool is_interface_factory)
+    : name_(name), factory_(is_interface_factory)
 {
     load();
 }
@@ -65,7 +68,7 @@ void shared_object::load()
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    lmap = (link_map *)dlopen(path_.c_str(), RTLD_NOLOAD);
+    lmap = (link_map *) dlopen(path_.c_str(), RTLD_NOLOAD);
     while (lmap == nullptr)
     {
         std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -74,35 +77,35 @@ void shared_object::load()
         {
             log::error("dlerror: %s", error);
         }
-        lmap = (link_map *)dlopen(path_.c_str(), RTLD_NOLOAD);
+        lmap = (link_map *) dlopen(path_.c_str(), RTLD_NOLOAD);
     }
     text_section_info();
-    log::debug("Shared object %s loaded at 0x%08x, .text[%08x - %08x]", name_.c_str(), lmap->l_addr, text_begin_, text_end_);
+    log::debug("Shared object %s loaded at 0x%08x, .text[%08x - %08x]",
+               name_.c_str(), lmap->l_addr, text_begin_, text_end_);
     if (factory_)
     {
-        create_interface_fn = reinterpret_cast<CreateInterface_t>(dlsym(lmap, "CreateInterface"));
+        create_interface_fn =
+            reinterpret_cast<CreateInterface_t>(dlsym(lmap, "CreateInterface"));
         if (create_interface_fn == nullptr)
         {
-            log::error("Failed to create interface factory for %s", name_.c_str());
+            log::error("Failed to create interface factory for %s",
+                       name_.c_str());
         }
     }
 }
 
 void shared_object::text_section_info()
 {
-    int fd = open(path_.c_str(), O_RDONLY);
+    int fd      = open(path_.c_str(), O_RDONLY);
     size_t size = lseek(fd, 0, SEEK_END);
-    uintptr_t begin = uintptr_t(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
+    uintptr_t begin =
+        uintptr_t(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
 
-    defer
-    (
-        munmap((void *)begin, size);
-        close(fd);
-    )
+    defer(munmap((void *) begin, size); close(fd);)
 
-    Elf32_Ehdr *ehdr = (Elf32_Ehdr *)begin;
-    Elf32_Shdr *shdr = (Elf32_Shdr *)(begin + ehdr->e_shoff);
-    int shnum = ehdr->e_shnum;
+        Elf32_Ehdr *ehdr = (Elf32_Ehdr *) begin;
+    Elf32_Shdr *shdr     = (Elf32_Shdr *) (begin + ehdr->e_shoff);
+    int shnum            = ehdr->e_shnum;
 
     Elf32_Shdr *shstr = &shdr[ehdr->e_shstrndx];
     if (shstr == nullptr)
@@ -116,7 +119,7 @@ void shared_object::text_section_info()
         return;
     }
 
-    char *strtab = (char *)(begin + shstr->sh_offset);
+    char *strtab  = (char *) (begin + shstr->sh_offset);
     int strtabnum = shstr->sh_size;
 
     for (int i = 0; i < ehdr->e_shnum; i++)
@@ -127,80 +130,76 @@ void shared_object::text_section_info()
             if (strcmp(strtab + hdr->sh_name, ".text") == 0)
             {
                 text_begin_ = lmap->l_addr + hdr->sh_addr;
-                text_end_ = text_begin_ + hdr->sh_size;
+                text_end_   = text_begin_ + hdr->sh_size;
                 return;
             }
         }
     }
 }
 
-shared_object& steamclient()
+shared_object &steamclient()
 {
     static shared_object object("steamclient.so", true);
     return object;
 }
 
-shared_object& client()
+shared_object &client()
 {
     static shared_object object("client.so", true);
     return object;
 }
 
-shared_object& engine()
+shared_object &engine()
 {
     static shared_object object("engine.so", true);
     return object;
 }
 
-shared_object& vstdlib()
+shared_object &vstdlib()
 {
     static shared_object object("libvstdlib.so", true);
     return object;
 }
 
-shared_object& tier0()
+shared_object &tier0()
 {
     static shared_object object("libtier0.so", false);
     return object;
 }
 
-shared_object& inputsystem()
+shared_object &inputsystem()
 {
     static shared_object object("inputsystem.so", true);
     return object;
 }
 
-shared_object& materialsystem()
+shared_object &materialsystem()
 {
     static shared_object object("materialsystem.so", true);
     return object;
 }
 
-shared_object& vguimatsurface()
+shared_object &vguimatsurface()
 {
     static shared_object object("vguimatsurface.so", true);
     return object;
 }
 
-shared_object& vgui2()
+shared_object &vgui2()
 {
     static shared_object object("vgui2.so", true);
     return object;
 }
 
-shared_object& studiorender()
+shared_object &studiorender()
 {
     static shared_object object("studiorender.so", true);
     return object;
 }
 
-shared_object& libsdl()
+shared_object &libsdl()
 {
     static shared_object object("libSDL2-2.0.so.0", false);
     return object;
 }
-
 }
-
-
-

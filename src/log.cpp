@@ -20,13 +20,13 @@
 namespace log
 {
 
-level min_level { level::DEBUG };
-bool file_log_enabled { false };
+level min_level{ level::DEBUG };
+bool file_log_enabled{ false };
 std::ofstream file;
 
 void setup(level lvl, bool write_to_file, std::string filename)
 {
-    min_level = lvl;
+    min_level        = lvl;
     file_log_enabled = write_to_file;
     if (write_to_file)
     {
@@ -35,10 +35,7 @@ void setup(level lvl, bool write_to_file, std::string filename)
     }
 }
 
-static const char *level_names[] =
-        {
-                "DEBUG", "INFO", "WARNING", "ERROR"
-        };
+static const char *level_names[] = { "DEBUG", "INFO", "WARNING", "ERROR" };
 
 static void log_internal(level lvl, const char *format, const va_list list)
 {
@@ -49,7 +46,8 @@ static void log_internal(level lvl, const char *format, const va_list list)
     time(&current_time);
     time_info = localtime(&current_time);
     strftime(time_string, sizeof(time_string), "%H:%M:%S", time_info);
-    int written = sprintf(buffer, "[%-7s] [%s] ", level_names[static_cast<int>(lvl)], time_string);
+    int written = sprintf(buffer, "[%-7s] [%s] ",
+                          level_names[static_cast<int>(lvl)], time_string);
     vsnprintf(buffer + 21, 1002, format, list);
 
     if (file_log_enabled && file.good())
@@ -98,7 +96,4 @@ void error(const char *format, ...)
     log_internal(level::ERROR, format, list);
     va_end(list);
 }
-
 }
-
-

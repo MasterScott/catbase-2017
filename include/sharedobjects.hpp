@@ -12,18 +12,23 @@
 
 struct link_map;
 
-namespace so {
+namespace so
+{
 
-bool object_full_path(std::string& name, std::string& out_full_path);
+bool object_full_path(std::string &name, std::string &out_full_path);
 
-class shared_object {
+class shared_object
+{
 public:
     typedef void *(*CreateInterface_t)(const char *, int *);
+
 public:
-    shared_object(const std::string& name, bool is_interface_factory);
+    shared_object(const std::string &name, bool is_interface_factory);
+
 protected:
     void load();
     void text_section_info();
+
 public:
     std::string name_;
     std::string path_;
@@ -38,19 +43,15 @@ public:
     uintptr_t text_end_{ 0 };
 };
 
-
-shared_object& steamclient();
-shared_object& client();
-shared_object& engine();
-shared_object& vstdlib();
-shared_object& tier0();
-shared_object& inputsystem();
-shared_object& materialsystem();
-shared_object& vguimatsurface();
-shared_object& vgui2();
-shared_object& studiorender();
-shared_object& libsdl();
-
+shared_object &steamclient();
+shared_object &client();
+shared_object &engine();
+shared_object &vstdlib();
+shared_object &tier0();
+shared_object &inputsystem();
+shared_object &materialsystem();
+shared_object &vguimatsurface();
+shared_object &vgui2();
+shared_object &studiorender();
+shared_object &libsdl();
 }
-
-

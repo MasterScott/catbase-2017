@@ -13,25 +13,23 @@
 namespace tools
 {
 
-void string_replace(std::string& string, const std::string& what, const std::string& with_what)
+void string_replace(std::string &string, const std::string &what,
+                    const std::string &with_what)
 {
     size_t index = string.find(what);
-    while (index != std::string::npos) {
+    while (index != std::string::npos)
+    {
         string.replace(index, what.size(), with_what);
         index = string.find(what, index + with_what.size());
     }
 }
 
-const std::string& get_user_name()
+const std::string &get_user_name()
 {
-    static std::string username = []()
-        {
-            passwd *pwd = getpwuid(getuid());
-            return (pwd && pwd->pw_name) ?
-                    std::string(pwd->pw_name) :
-                    "null";
-        }();
+    static std::string username = []() {
+        passwd *pwd = getpwuid(getuid());
+        return (pwd && pwd->pw_name) ? std::string(pwd->pw_name) : "null";
+    }();
     return username;
 }
-
 }

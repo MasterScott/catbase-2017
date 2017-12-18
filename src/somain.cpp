@@ -19,7 +19,7 @@ void cheat_main_thread()
 
 void __attribute__((constructor)) attach()
 {
-    main_thread = std::thread { cheat_main_thread };
+    main_thread = std::thread{ cheat_main_thread };
 }
 
 void __attribute__((destructor)) detach()
