@@ -3,12 +3,16 @@ OUT_NAME=libcatbase.so
 DEBUG_BUILD=1
 NO_WARNINGS=0
 
+DEBUG_BUILD=0
+NO_WARNINGS=0
+
 LIB_DIR=lib
 SRC_DIR=src
 OUT_DIR=bin
 TARGET=$(OUT_DIR)/$(OUT_NAME)
 
-INCLUDES=-Iinclude
+INCLUDES_SOURCESDK=-isystem$(SSDK_DIR)/public -isystem$(SSDK_DIR)/mathlib -isystem$(SSDK_DIR)/common -isystem$(SSDK_DIR)/public/tier1 -isystem$(SSDK_DIR)/public/tier0 -isystem$(SSDK_DIR)
+INCLUDES=-Iinclude $(INCLUDES_SOURCESDK)
 LDLIBS=
 LDFLAGS=-shared -L$(realpath $(LIB_DIR)) -L/usr/lib/i386-linux-gnu
 SOURCES=$(shell find $(SRC_DIR) -name "*.c*" -print)
