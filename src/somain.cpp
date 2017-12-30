@@ -10,6 +10,8 @@
 
 #include "cheat.hpp"
 
+#include <stdio.h>
+
 std::thread main_thread;
 
 void cheat_main_thread()

@@ -85,14 +85,9 @@ uintptr_t signature::scan(uintptr_t start, uintptr_t end)
         }
         if (found == data_.size())
         {
-            return start - found;
+            return start - found + 1;
         }
     }
-    return not_found;
-}
-
-uintptr_t signature::scan(const so::shared_object &object)
-{
-    return scan(object.text_begin_, object.text_end_);
+    return 0;
 }
 }

@@ -11,6 +11,7 @@ SRC_DIR=src
 OUT_DIR=bin
 TARGET=$(OUT_DIR)/$(OUT_NAME)
 
+SSDK_DIR=source-sdk-2013-headers/mp/src
 INCLUDES_SOURCESDK=-isystem$(SSDK_DIR)/public -isystem$(SSDK_DIR)/mathlib -isystem$(SSDK_DIR)/common -isystem$(SSDK_DIR)/public/tier1 -isystem$(SSDK_DIR)/public/tier0 -isystem$(SSDK_DIR)
 INCLUDES=-Iinclude $(INCLUDES_SOURCESDK)
 LDLIBS=
@@ -52,7 +53,7 @@ CFLAGS+=$(INCLUDES)
 OBJECTS=$(patsubst %.c,%.o, $(patsubst %.cpp,%.o, $(SOURCES)))
 DEPENDS=$(patsubst %.c,%.d, $(patsubst %.cpp,%.d, $(SOURCES)))
 
-.PHONY: clean directories echo data
+.PHONY: clean echo data
 
 all:
 	mkdir -p $(OUT_DIR)
