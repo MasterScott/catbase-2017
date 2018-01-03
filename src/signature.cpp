@@ -68,7 +68,7 @@ signature::signature(const uint8_t *bytes, const char *mask)
 
 uintptr_t signature::scan(uintptr_t start, uintptr_t end)
 {
-    log::debug("scanning from %p to %p for %u bytes", start, end, data_.size());
+    LOG_DEBUG("scanning from %p to %p for %u bytes", start, end, data_.size());
     size_t found = 0;
     for (; start < end; start++)
     {

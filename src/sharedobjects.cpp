@@ -75,12 +75,12 @@ void shared_object::load()
         char *error = dlerror();
         if (error)
         {
-            log::error("dlerror: %s", error);
+            LOG_ERROR("dlerror: %s", error);
         }
         lmap = (link_map *) dlopen(path_.c_str(), RTLD_NOLOAD);
     }
     text_section_info();
-    log::debug("Shared object %s loaded at 0x%08x, .text[%08x - %08x]",
+    LOG_DEBUG("Shared object %s loaded at 0x%08x, .text[%08x - %08x]",
                name_.c_str(), lmap->l_addr, text_begin_, text_end_);
     if (factory_)
     {
@@ -88,7 +88,7 @@ void shared_object::load()
             reinterpret_cast<CreateInterface_t>(dlsym(lmap, "CreateInterface"));
         if (create_interface_fn == nullptr)
         {
-            log::error("Failed to create interface factory for %s",
+            LOG_ERROR("Failed to create interface factory for %s",
                        name_.c_str());
         }
     }
@@ -110,12 +110,12 @@ void shared_object::text_section_info()
     Elf32_Shdr *shstr = &shdr[ehdr->e_shstrndx];
     if (shstr == nullptr)
     {
-        log::error("ELF string table is NULL for %s", path_.c_str());
+        LOG_ERROR("ELF string table is NULL for %s", path_.c_str());
         return;
     }
     if (shstr->sh_type != SHT_STRTAB)
     {
-        log::error("Invalid string table for %s", path_.c_str());
+        LOG_ERROR("Invalid string table for %s", path_.c_str());
         return;
     }
 

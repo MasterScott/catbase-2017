@@ -8,6 +8,7 @@
 #pragma once
 
 #include "sharedobjects.hpp"
+#include "log.hpp"
 
 template <typename T> class I
 {
@@ -28,7 +29,7 @@ public:
                 return;
         }
 
-        log::error("Failed to create interface '%s'", name.c_str());
+        LOG_ERROR("Failed to create interface '%s'", name.c_str());
     }
     inline operator T *() const
     {

@@ -10,28 +10,39 @@
 #include "sharedobjects.hpp"
 #include "interfaces.hpp"
 #include "signature.hpp"
+#include "netvar.hpp"
+
+#include <cdll_int.h>
+#include <icliententitylist.h>
 
 namespace cheat
 {
 
 void init()
 {
-    log::setup(log::level::DEBUG, true, "/tmp/catbase-%USER%.log");
-    log::info("Welcome!");
-    log::debug("Trying to load some shared objects");
-    I<void>::init(so::client(), "VClientEntityList", 0);
+    CATBASE_LOG_SETUP("/tmp/catbase-%USER%.log");
+    LOG_INFO("Welcome!");
+    LOG_SILLY("This is a test! %d %s", 123, "Test!");
+    LOG_DEBUG("Loading some shared objects");
+
+    I<IClientEntityList>::init(so::client(), "VClientEntityList", 0);
+    I<IVEngineClient013>::init(so::engine(), "VEngineClient", 13);
+    I<IBaseClientDLL>::init(so::client(), "VClient", 0);
+
+    netvars.init();
+
+    LOG_DEBUG("Health: %u", netvars.player.health.offset());
+
+
 
     int *g_pPredictionRandomSeed =
         *(signature::signature(
               "A3 ? ? ? ? C3 8D 74 26 00 B8 FF FF FF FF 5D A3 ? ? ? ? C3")
               .scan<int *>(so::client(), 1));
-    log::debug("pRandom seed: %08x", g_pPredictionRandomSeed);
-    log::debug("Random seed: %d", *g_pPredictionRandomSeed);
-    log::debug("%p", I<void>()());
 }
 
 void shutdown()
 {
-    log::warning("Shutting down!");
+    LOG_WARNING("Shutting down now");
 }
 }
