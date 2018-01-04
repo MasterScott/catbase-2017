@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <memory>
+#include <iostream>
 
 #include <dt_recv.h>
 
@@ -47,8 +48,10 @@ public:
     temporary_netvar_tree();
 public:
     map_t table_to_map(RecvTable *table);
+    void dump(std::ostream& stream);
+    void dump_recursive(std::ostream& stream, int depth, int accumulated, const map_t& map);
 public:
-    map_t nodes_{};
+    std::unordered_map<std::string, map_t> nodes_{};
 };
 
 class netvar_base
@@ -65,25 +68,7 @@ public:
     {
         return offset_;
     }
-    void init_offset(temporary_netvar_tree& tree)
-    {
-        offset_ = 0;
-
-        temporary_netvar_tree::map_t *current = &tree.nodes_;
-
-        while (!location_.empty())
-        {
-            auto next = location_.front();
-
-            // Will throw an exception if tree does not contain the netvar
-            temporary_netvar_tree::node& node = *current->at(next);
-
-            offset_ += node.prop->GetOffset();
-            current = &node.nodes;
-
-            location_.pop();
-        }
-    }
+    void init_offset(temporary_netvar_tree& tree);
 protected:
     uintptr_t offset_{ 0 };
     std::queue<std::string> location_{};
@@ -106,7 +91,7 @@ class storage
 public:
     storage() = default;
 public:
-    void init();
+    temporary_netvar_tree init();
 public:
     struct
     {

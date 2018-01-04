@@ -17,7 +17,7 @@
 #include <stdarg.h>
 #include <fstream>
 
-namespace log
+namespace catbase_logging
 {
 
 std::ofstream file;
@@ -30,7 +30,7 @@ void setup(std::string filename)
 
 static const char *level_names[] = { "NONE", "ERROR", "WARNING", "INFO", "DEBUG", "SILLY" };
 
-void log_internal(catbase_log_level lvl, const char *format, ...)
+void log_internal(int lvl, const char *format, ...)
 {
     char buffer[1024];
     struct tm *time_info = nullptr;
@@ -46,6 +46,9 @@ void log_internal(catbase_log_level lvl, const char *format, ...)
     va_start(list, format);
     vsnprintf(buffer + 21, 1002, format, list);
     va_end(list);
+
+    fprintf(stdout, "%s\n", buffer);
+    fflush(stdout);
 
     if (file.good())
     {

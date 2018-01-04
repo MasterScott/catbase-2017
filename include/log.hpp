@@ -17,22 +17,19 @@
  * And #defines don't like ::'s inside - so a global enum is used instead of an enum class.
  */
 
-enum catbase_log_level
-{
-    CBLL_NONE,
-    CBLL_ERROR,
-    CBLL_WARNING,
-    CBLL_INFO,
-    CBLL_DEBUG,
-    CBLL_SILLY
-};
+#define CBLL_NONE 0
+#define CBLL_ERROR 1
+#define CBLL_WARNING 2
+#define CBLL_INFO 3
+#define CBLL_DEBUG 4
+#define CBLL_SILLY 5
 
 namespace catbase_logging
 {
 
 void setup(std::string filename);
 
-void log_internal(catbase_log_level lvl, const char *format, ...);
+void log_internal(int lvl, const char *format, ...);
 
 }
 
@@ -49,8 +46,7 @@ void log_internal(catbase_log_level lvl, const char *format, ...);
 #if CATBASE_LOG_LEVEL == CBLL_NONE
 #       define CATBASE_LOG_SETUP(filename)
 #else
-#       define CATBASE_LOG_SETUP(filename) \
-		catbase_logging::setup(filename)
+#       define CATBASE_LOG_SETUP(filename) catbase_logging::setup(filename)
 #endif
 
 #if CATBASE_LOG_LEVEL >= CBLL_SILLY

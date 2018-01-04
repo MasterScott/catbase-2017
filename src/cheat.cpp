@@ -12,6 +12,8 @@
 #include "signature.hpp"
 #include "netvar.hpp"
 
+#include <fstream>
+
 #include <cdll_int.h>
 #include <icliententitylist.h>
 
@@ -29,9 +31,15 @@ void init()
     I<IVEngineClient013>::init(so::engine(), "VEngineClient", 13);
     I<IBaseClientDLL>::init(so::client(), "VClient", 0);
 
-    netvars.init();
+    auto tree = netvars.init();
 
-    LOG_DEBUG("Health: %u", netvars.player.health.offset());
+    std::ofstream dump("/tmp/catbase-netvar-dump.log");
+
+    tree.dump(dump);
+
+    LOG_DEBUG("Dumping netvars");
+
+    LOG_SILLY("Health offset: %u", netvars.player.health.offset());
 
 
 

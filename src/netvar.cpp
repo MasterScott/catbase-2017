@@ -10,6 +10,7 @@
 #include "log.hpp"
 
 #include <cdll_int.h>
+#include <client_class.h>
 #include <dt_recv.h>
 
 namespace netvar
@@ -20,9 +21,53 @@ namespace internal
 
 temporary_netvar_tree::temporary_netvar_tree()
 {
-    auto *begin= I<IBaseClientDLL>()->GetAllClasses();
+    auto *current = I<IBaseClientDLL>()->GetAllClasses();
+
+    while (current != nullptr)
+    {
+        nodes_[std::string(current->m_pRecvTable->m_pNetTableName)] = table_to_map(current->m_pRecvTable);
+        current = current->m_pNext;
+    }
+}
 
 
+void temporary_netvar_tree::dump(std::ostream& stream)
+{
+    for (const auto& i : nodes_)
+    {
+        stream << i.first << '\n';
+        dump_recursive(stream, 1, 0, i.second);
+        stream << "\n\n";
+    }
+}
+
+static const char *sendproptypenames[] = {
+        "Int",
+        "Float",
+        "Vector",
+        "VectorXY",
+        "String",
+        "Array",
+        "Table",
+        nullptr
+};
+
+void temporary_netvar_tree::dump_recursive(std::ostream& stream, int depth, int accumulated, const temporary_netvar_tree::map_t& map)
+{
+    for (const auto& i : map)
+    {
+        const auto& node = i.second;
+
+        if (isdigit(node->prop->GetName()[0]))
+            continue;
+
+        stream << std::string(depth, '\t') << node->prop->GetName() << " [" << sendproptypenames[node->prop->GetType()] << "]: " << std::hex << accumulated + node->prop->GetOffset() << '\n';
+
+        if (node->prop->m_RecvType == SendPropType::DPT_DataTable)
+        {
+            dump_recursive(stream, depth + 1, accumulated + node->prop->GetOffset(), node->nodes);
+        }
+    }
 }
 
 temporary_netvar_tree::map_t temporary_netvar_tree::table_to_map(RecvTable *table)
@@ -47,7 +92,29 @@ temporary_netvar_tree::map_t temporary_netvar_tree::table_to_map(RecvTable *tabl
     return result;
 }
 
-void storage::init()
+void netvar_base::init_offset(temporary_netvar_tree& tree)
+{
+    offset_ = 0;
+
+    auto& datatable = tree.nodes_.at(location_.front());
+    location_.pop();
+
+    temporary_netvar_tree::map_t *current = &datatable;
+
+    while (!location_.empty())
+    {
+        auto next = location_.front();
+        // Will throw an exception if tree does not contain the netvar
+        temporary_netvar_tree::node& node = *current->at(next);
+
+        offset_ += node.prop->GetOffset();
+        current = &node.nodes;
+
+        location_.pop();
+    }
+}
+
+temporary_netvar_tree storage::init()
 {
     LOG_DEBUG("Initializing netvar tree");
 
@@ -57,10 +124,19 @@ void storage::init()
     {
         auto netvar = init_list().front();
 
-        netvar->
+        try
+        {
+            netvar->init_offset(tree);
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR("Error while initializing NetVar: %s", ex.what());
+        }
 
         init_list().pop();
     }
+
+    return tree;
 }
 
 }
