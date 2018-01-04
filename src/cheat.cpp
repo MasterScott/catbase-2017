@@ -11,8 +11,11 @@
 #include "interfaces.hpp"
 #include "signature.hpp"
 #include "netvar.hpp"
+#include "hooks/hooks.hpp"
+#include "visual/draw.hpp"
 
 #include <fstream>
+#include <unistd.h>
 
 #include <cdll_int.h>
 #include <icliententitylist.h>
@@ -23,30 +26,25 @@ namespace cheat
 void init()
 {
     CATBASE_LOG_SETUP("/tmp/catbase-%USER%.log");
-    LOG_INFO("Welcome!");
-    LOG_SILLY("This is a test! %d %s", 123, "Test!");
-    LOG_DEBUG("Loading some shared objects");
+    LOG_DEBUG("Initializing interfaces");
 
-    I<IClientEntityList>::init(so::client(), "VClientEntityList", 0);
-    I<IVEngineClient013>::init(so::engine(), "VEngineClient", 13);
-    I<IBaseClientDLL>::init(so::client(), "VClient", 0);
+    interfaces_init_all();
 
-    auto tree = netvars.init();
+    {
+        auto tree = netvars.init();
+        std::ofstream dump("/tmp/catbase-netvar-dump.log");
+        if (dump)
+            tree.dump(dump);
+    }
 
-    std::ofstream dump("/tmp/catbase-netvar-dump.log");
+    LOG_DEBUG("Initializing hooks");
+    hooks::init();
+    LOG_DEBUG("Initializing drawing");
+    draw::init();
 
-    tree.dump(dump);
+    LOG_DEBUG("Init done");
 
-    LOG_DEBUG("Dumping netvars");
-
-    LOG_SILLY("Health offset: %u", netvars.player.health.offset());
-
-
-
-    int *g_pPredictionRandomSeed =
-        *(signature::signature(
-              "A3 ? ? ? ? C3 8D 74 26 00 B8 FF FF FF FF 5D A3 ? ? ? ? C3")
-              .scan<int *>(so::client(), 1));
+    pause();
 }
 
 void shutdown()

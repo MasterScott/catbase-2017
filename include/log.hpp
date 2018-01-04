@@ -74,7 +74,7 @@ void log_internal(int lvl, const char *format, ...);
 #endif
 
 #if CATBASE_LOG_LEVEL >= CBLL_ERROR
-#       define LOG_ERROR(format, ...) catbase_logging::log_internal(CBLL_ERROR, format, __VA_ARGS__)
+#       define LOG_ERROR(...) catbase_logging::log_internal(CBLL_ERROR, __VA_ARGS__)
 #else
-#       define LOG_ERROR(format, ...)
+#       define LOG_ERROR(...)
 #endif

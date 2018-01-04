@@ -6,6 +6,7 @@
  */
 
 #include "hook.hpp"
+#include "log.hpp"
 
 #include <string.h>
 #include <stdlib.h>
@@ -22,12 +23,12 @@ unsigned count_methods(method_table_t table)
     return i;
 }
 
-table_ref_t get_vmt(ptr_t inst, uintptr_t offset)
+table_ref_t get_vmt(ptr_t inst, uintptr_t offset = 0)
 {
     return *reinterpret_cast<table_ptr_t>((uintptr_t) inst + offset);
 }
 
-bool is_hooked(ptr_t inst, uintptr_t offset)
+inline bool is_hooked(ptr_t inst, uintptr_t offset = 0)
 {
     return get_vmt(inst, offset)[-1] == (method_t) GUARD;
 }
@@ -39,29 +40,32 @@ vmt_hook::~vmt_hook()
 
 void vmt_hook::init(ptr_t inst, uintptr_t offset)
 {
-    release();
     vtable_ptr      = &get_vmt(inst, offset);
     vtable_original = *vtable_ptr;
     int mc          = count_methods(vtable_original);
-    vtable_hooked = static_cast<method_table_t>(calloc(mc + 3, sizeof(ptr_t)));
-    memcpy(&vtable_hooked[2], vtable_original, sizeof(ptr_t) * mc);
+    LOG_DEBUG("Hooking %08x with %d methods, vtable at %08x %08x", inst, mc, vtable_original, vtable_ptr);
+    vtable_hooked = static_cast<method_table_t>(calloc(mc + 4, sizeof(ptr_t)));
+    memcpy(&vtable_hooked[3], vtable_original, sizeof(ptr_t) * mc);
     vtable_hooked[0] = this;
-    vtable_hooked[1] = (method_t) GUARD;
+    vtable_hooked[1] = vtable_original;
+    vtable_hooked[2] = (method_t) GUARD;
 }
 
 void vmt_hook::hook(method_t func, uintptr_t idx)
 {
-    vtable_hooked[2 + idx] = func;
+    LOG_DEBUG("Replacing method %u (%08x) with %08x", idx, vtable_original[idx], func);
+    vtable_hooked[3 + idx] = func;
 }
 
 void vmt_hook::apply()
 {
-    *vtable_ptr = &vtable_hooked[2];
+    LOG_DEBUG("Applied hook");
+    *vtable_ptr = &vtable_hooked[3];
 }
 
 void vmt_hook::release()
 {
-    if (vtable_ptr && *vtable_ptr == &vtable_hooked[2])
+    if (vtable_ptr && *vtable_ptr == &vtable_hooked[3])
     {
         if ((*vtable_ptr)[-1] == (method_t) GUARD)
         {

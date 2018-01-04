@@ -10,6 +10,8 @@
 #include "sharedobjects.hpp"
 #include "log.hpp"
 
+void interfaces_init_all();
+
 template <typename T> class I
 {
 public:

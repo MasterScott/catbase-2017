@@ -24,6 +24,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.409840491" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/source-sdk-2013-headers/mp/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/source-sdk-2013-headers/mp/src/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1422359638" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -44,12 +45,14 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="include|source-sdk-2013|sdk|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry excluding="visual|hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/hooks"/>
 						<entry excluding="source-sdk-2013" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/sdk"/>
-						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/visual"/>
+						<entry excluding="visual|hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/hooks"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/sdk"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/visual"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -78,8 +81,9 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1179026486" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/source-sdk-2013-headers/mp/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/source-sdk-2013-headers/mp/src/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/catbase/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1058017902" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1058017902" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="DEBUG_BUILD=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.34525289" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -101,12 +105,14 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="include|source-sdk-2013|sdk|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry excluding="visual|hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/hooks"/>
 						<entry excluding="source-sdk-2013" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/sdk"/>
-						<entry excluding="hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include/visual"/>
+						<entry excluding="visual|hooks|sdk" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/hooks"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/sdk"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/visual"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
