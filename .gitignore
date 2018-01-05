@@ -2,3 +2,7 @@
 *.d
 *.so
 .settings/*
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
