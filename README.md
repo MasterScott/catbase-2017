@@ -1,6 +1,6 @@
 # catbase-2017
 
-# WORK IN PROGRESS
+# NULLIFIEDCAT NEVER COMPLETED IT
 
 Simple TF2 base for Linux.
 
